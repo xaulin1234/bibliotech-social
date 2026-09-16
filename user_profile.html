@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body text-center">
+                <div class="bg-primary rounded-circle text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px; font-size: 40px;">
+                    {{ user.username[0]|upper }}
+                </div>
+                <h4>{{ user.username }}</h4>
+                <p class="text-muted">{{ user.bio }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <h3 class="mb-4">Estante de {{ user.username }}</h3>
+        <div class="row">
+            {% for book in user.books %}
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 border-secondary shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
+                        <span class="badge bg-info">{{ book.status }}</span>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12">
+                <p class="text-muted">Este usuário ainda não adicionou nenhum livro à estante.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
