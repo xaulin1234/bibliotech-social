@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <!-- Barra Lateral: Perfil e Adicionar Livro -->
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body text-center">
+                <div class="bg-secondary rounded-circle text-white d-inline-flex align-items-center justify-content-center mb-3" style="width: 100px; height: 100px; font-size: 40px;">
+                    {{ user.username[0]|upper }}
+                </div>
+                <h4>{{ user.username }}</h4>
+                <p class="text-muted">{{ user.bio }}</p>
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                    Editar Perfil
+                </button>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">Adicionar à Biblioteca</div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('profile') }}">
+                    <div class="mb-3">
+                        <input type="text" name="title" class="form-control" placeholder="Título do Livro" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" name="author" class="form-control" placeholder="Autor" required>
+                    </div>
+                    <div class="mb-3">
+                        <select name="status" class="form-select">
+                            <option value="Tenho">Tenho</option>
+                            <option value="Quero ler">Quero Comprar / Ler</option>
+                            <option value="Lido">Já Li</option>
+                        </select>
+                    </div>
+                    <button type="submit" name="add_book" class="btn btn-success w-100">Adicionar Livro</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estante -->
+    <div class="col-md-8">
+        <h3>Minha Estante</h3>
+        <div class="row mt-3">
+            {% for book in user.books %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 border-primary shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
+                        <span class="badge bg-info">{{ book.status }}</span>
+                        
+                        <hr>
+                        <button class="btn btn-outline-primary btn-sm w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReview{{ book.id }}">
+                            Escrever Resenha
+                        </button>
+
+                        <div class="collapse" id="collapseReview{{ book.id }}">
+                            <form action="{{ url_for('add_review', book_id=book.id) }}" method="POST">
+                                <textarea name="content" class="form-control form-control-sm mb-2" rows="3" placeholder="O que você achou do livro?" required></textarea>
+                                <button type="submit" class="btn btn-primary btn-sm w-100">Publicar no Feed</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p class="text-muted">Você ainda não tem livros na estante.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edição Perfil -->
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="{{ url_for('profile') }}">
+          <div class="modal-header">
+            <h5 class="modal-title">Editar Perfil</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+                <label>Sua Bio</label>
+                <textarea name="bio" class="form-control" rows="3">{{ user.bio }}</textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" name="update_profile" class="btn btn-primary">Salvar Mudanças</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
