@@ -1,0 +1,4 @@
+echo "gunicorn" >> requirements.txt
+git add requirements.txt
+git commit -m "fix: adiciona dependência do gunicorn"
+git push origin main
