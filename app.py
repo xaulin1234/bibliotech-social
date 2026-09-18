@@ -14,6 +14,8 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message = "Por favor, faça login para acessar esta página."
 login_manager.login_message_category = "warning"
+with app.app_context():
+    db.create_all()
 
 # ================= MODELOS DE DADOS ================= #
 
