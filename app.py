@@ -59,6 +59,11 @@ def logout():
 if __name__ == '__main__':
     app.run(debug=True)
 
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password_hash = db.Column(db.String(150), nullable=False)
+    bio = db.Column(db.String(255), nullable=True)
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
